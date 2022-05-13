@@ -1,17 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const MatchResult_1 = require("./MatchResult");
-const MATCHReader_1 = require("./MATCHReader");
-const fileReader = new MATCHReader_1.MatchReader("football.csv");
-fileReader.read();
-let manUnitedWins = 0;
-for (let match of fileReader.data) {
-    if (match[1] === "Man United" && match[5] === MatchResult_1.MatchResult.HomeWin) {
-        manUnitedWins++;
-    }
-    else if (match[2] === "Man United" && match[5] === MatchResult_1.MatchResult.AwayWin) {
-        manUnitedWins++;
-    }
-}
-console.log(fileReader.data[0]);
-console.log(`Man United won ${manUnitedWins} games`);
+const MatchReader_1 = require("./composition/MatchReader");
+const CsvFileReader_1 = require("./composition/CsvFileReader");
+const Analyzer_1 = require("./composition/Analyzer");
+const Summary_1 = require("./composition/Summary");
+const OutputTarget_1 = require("./composition/OutputTarget");
+const fileReader = new CsvFileReader_1.CsvFileReader("football.csv");
+const matchReader = new MatchReader_1.MatchReader(fileReader);
+matchReader.load();
+let summary = Summary_1.Summary.winsOnConsole("Man United");
+summary.buildAndPrintReport(matchReader.matches);
+summary = new Summary_1.Summary(new Analyzer_1.AverageGoalsAnalysis("Man United"), new OutputTarget_1.HtmlReport());
+summary.buildAndPrintReport(matchReader.matches);
