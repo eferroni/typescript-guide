@@ -43,10 +43,3 @@ function printAnything<T>(arr: T[]) {
 
 printAnything<string>(["a", "b", "c"]);
 printAnything<number>([1, 2, 3]);
-
-// constraints
-class Car {
-  print() {
-    console.log("Iam a car");
-  }
-}
